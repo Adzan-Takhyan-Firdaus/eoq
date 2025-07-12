@@ -1,4 +1,3 @@
-# streamlit_app.py
 import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
@@ -12,7 +11,7 @@ st.write("""
 Aplikasi ini menghitung parameter sistem antrian dengan model M/M/1 serta menampilkan grafik dan simulasi animasi.
 """)
 
-# Input user
+# Input
 lambd = st.number_input("λ (arrival rate)", min_value=0.0, format="%.2f")
 mu = st.number_input("μ (service rate)", min_value=0.0, format="%.2f")
 
@@ -20,6 +19,7 @@ if lambd > 0 and mu > 0:
     if lambd >= mu:
         st.error("λ harus lebih kecil dari μ agar sistem stabil.")
     else:
+        # Perhitungan parameter
         rho = lambd / mu
         L = rho / (1 - rho)
         Lq = rho**2 / (1 - rho)
@@ -33,18 +33,16 @@ if lambd > 0 and mu > 0:
         st.write(f"**Rata-rata waktu dalam sistem (W):** {W:.4f}")
         st.write(f"**Rata-rata waktu dalam antrian (Wq):** {Wq:.4f}")
 
-        # Grafik batang parameter
+        # Grafik batang
         st.subheader("📊 Grafik Parameter:")
         fig, ax = plt.subplots()
         param_names = ["Utilisasi (ρ)", "L", "Lq"]
         param_values = [rho, L, Lq]
-        colors = ["skyblue", "lightgreen", "salmon"]
-        ax.bar(param_names, param_values, color=colors)
+        ax.bar(param_names, param_values, color=["skyblue", "lightgreen", "salmon"])
         ax.set_ylabel("Nilai")
-        ax.set_ylim(0, max(param_values)*1.2)
         st.pyplot(fig)
 
-        # Grafik utilisasi terhadap arrival rate
+        # Grafik utilisasi terhadap λ
         st.subheader("📈 Grafik Utilisasi vs Arrival Rate:")
         lambd_range = np.linspace(0, mu*0.99, 100)
         rho_range = lambd_range / mu
@@ -55,16 +53,26 @@ if lambd > 0 and mu > 0:
         ax2.set_title("Utilisasi terhadap λ")
         st.pyplot(fig2)
 
-        # Simulasi animasi kedatangan pelanggan
+        # 🕒 SIMULASI ANIMASI PELANGGAN
         st.subheader("🕒 Simulasi Animasi Kedatangan Pelanggan:")
-        total_customers = 5
-        progress_bar = st.progress(0)
-        status_text = st.empty()
 
-        for i in range(1, total_customers + 1):
-            status_text.text(f"Pelanggan {i} sedang dilayani...")
-            time.sleep(0.5)  # waktu simulasi
-            progress_bar.progress(i / total_customers)
+        total_customers = 5
+        queue_slots = ["[ ]", "[ ]", "[ ]", "[ ]", "[ ]"]
+        status_text = st.empty()
+        queue_display = st.empty()
+
+        for i in range(total_customers):
+            # Update slot
+            queue_slots[i] = "[👤]"
+            queue_display.text("Antrian: " + " ".join(queue_slots))
+            status_text.text(f"Pelanggan {i+1} sedang dilayani...")
+            time.sleep(1)
+
+            # Kosongkan slot setelah dilayani
+            queue_slots[i] = "[✔️]"
+            queue_display.text("Antrian: " + " ".join(queue_slots))
+            time.sleep(0.5)
+
         status_text.text("✅ Semua pelanggan telah dilayani.")
 else:
     st.info("Masukkan λ dan μ > 0 untuk memulai perhitungan.")
