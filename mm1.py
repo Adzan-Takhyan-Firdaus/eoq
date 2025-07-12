@@ -67,8 +67,11 @@ if lambd > 0 and mu > 0:
         # 📈 GRAFIK GABUNGAN: Semua Parameter terhadap λ
         st.subheader("📈 Grafik ρ, L, Lq, W, dan Wq terhadap Arrival Rate (λ)")
 
-        # Range λ
-        lambd_range = np.linspace(0.01, mu * 0.99, 100)
+        # Pilih style lebih elegan
+        plt.style.use("seaborn-v0_8")
+
+        # Range λ (jangan terlalu dekat μ biar gak meledak)
+        lambd_range = np.linspace(0.01, mu * 0.90, 100)
 
         # Hitung semua parameter
         rho_range = lambd_range / mu
@@ -78,16 +81,28 @@ if lambd > 0 and mu > 0:
         Wq_range = rho_range / (mu - lambd_range)
 
         # Buat figure
-        fig, ax = plt.subplots(figsize=(8, 6))
-        ax.plot(lambd_range, rho_range, label="Utilisasi (ρ)", color="purple")
-        ax.plot(lambd_range, L_range, label="Rata-rata Pelanggan (L)", color="blue")
-        ax.plot(lambd_range, Lq_range, label="Rata-rata Antrian (Lq)", color="orange")
-        ax.plot(lambd_range, W_range, label="Waktu Sistem (W)", color="green")
-        ax.plot(lambd_range, Wq_range, label="Waktu Antrian (Wq)", color="red")
+        fig, ax = plt.subplots(figsize=(9,6))
+
+        # Plot dengan linewidth lebih tebal
+        ax.plot(lambd_range, rho_range, label="Utilisasi (ρ)", color="purple", linewidth=2)
+        ax.plot(lambd_range, L_range, label="Rata-rata Pelanggan (L)", color="blue", linewidth=2)
+        ax.plot(lambd_range, Lq_range, label="Rata-rata Antrian (Lq)", color="orange", linewidth=2)
+        ax.plot(lambd_range, W_range, label="Waktu Sistem (W)", color="green", linewidth=2)
+        ax.plot(lambd_range, Wq_range, label="Waktu Antrian (Wq)", color="red", linewidth=2)
+
+        # Label dan judul
         ax.set_xlabel("λ (arrival rate)")
         ax.set_ylabel("Nilai Parameter")
         ax.set_title("Grafik ρ, L, Lq, W, dan Wq terhadap λ")
         ax.legend()
+
+        # Grid
+        ax.grid(True, linestyle='--', alpha=0.7)
+
+        # Batas Y max biar gak terlalu tinggi
+        ax.set_ylim(0, np.nanmax([L_range, W_range]) * 1.2)
+
+        # Tampilkan grafik
         st.pyplot(fig)
 
 
