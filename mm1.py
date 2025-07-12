@@ -33,27 +33,7 @@ if lambd > 0 and mu > 0:
         st.write(f"**Rata-rata waktu dalam sistem (W):** {W:.4f}")
         st.write(f"**Rata-rata waktu dalam antrian (Wq):** {Wq:.4f}")
 
-        # Grafik batang
-        st.subheader("📊 Grafik Parameter:")
-        fig, ax = plt.subplots()
-        param_names = ["Utilisasi (ρ)", "L", "Lq"]
-        param_values = [rho, L, Lq]
-        ax.bar(param_names, param_values, color=["skyblue", "lightgreen", "salmon"])
-        ax.set_ylabel("Nilai")
-        st.pyplot(fig)
-
-        # Grafik utilisasi terhadap λ
-        st.subheader("📈 Grafik Utilisasi vs Arrival Rate:")
-        lambd_range = np.linspace(0, mu*0.99, 100)
-        rho_range = lambd_range / mu
-        fig2, ax2 = plt.subplots()
-        ax2.plot(lambd_range, rho_range, color="purple")
-        ax2.set_xlabel("λ (arrival rate)")
-        ax2.set_ylabel("Utilisasi (ρ)")
-        ax2.set_title("Utilisasi terhadap λ")
-        st.pyplot(fig2)
-
-        # 🕒 SIMULASI ANIMASI PELANGGAN
+        # 🕒 SIMULASI ANIMASI PELANGGAN (DITAMPILKAN SEBELUM GRAFIK)
         st.subheader("🕒 Simulasi Animasi Kedatangan Pelanggan:")
 
         total_customers = 5
@@ -74,5 +54,25 @@ if lambd > 0 and mu > 0:
             time.sleep(0.5)
 
         status_text.text("✅ Semua pelanggan telah dilayani.")
+
+        # 📊 GRAFIK BATANG PARAMETER
+        st.subheader("📊 Grafik Parameter:")
+        fig, ax = plt.subplots()
+        param_names = ["Utilisasi (ρ)", "L", "Lq"]
+        param_values = [rho, L, Lq]
+        ax.bar(param_names, param_values, color=["skyblue", "lightgreen", "salmon"])
+        ax.set_ylabel("Nilai")
+        st.pyplot(fig)
+
+        # 📈 GRAFIK UTILISASI TERHADAP λ
+        st.subheader("📈 Grafik Utilisasi vs Arrival Rate:")
+        lambd_range = np.linspace(0, mu*0.99, 100)
+        rho_range = lambd_range / mu
+        fig2, ax2 = plt.subplots()
+        ax2.plot(lambd_range, rho_range, color="purple")
+        ax2.set_xlabel("λ (arrival rate)")
+        ax2.set_ylabel("Utilisasi (ρ)")
+        ax2.set_title("Utilisasi terhadap λ")
+        st.pyplot(fig2)
 else:
     st.info("Masukkan λ dan μ > 0 untuk memulai perhitungan.")
