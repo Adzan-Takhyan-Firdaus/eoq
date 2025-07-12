@@ -64,27 +64,32 @@ if lambd > 0 and mu > 0:
         ax_bar.set_ylabel("Nilai")
         st.pyplot(fig_bar)
 
-        # 📈 GRAFIK GABUNGAN: ρ, L, Lq vs λ
-        st.subheader("📈 Grafik Utilisasi, L, dan Lq terhadap Arrival Rate (λ)")
+        # 📈 GRAFIK GABUNGAN: Semua Parameter terhadap λ
+        st.subheader("📈 Grafik ρ, L, Lq, W, dan Wq terhadap Arrival Rate (λ)")
 
         # Range λ
         lambd_range = np.linspace(0.01, mu * 0.99, 100)
 
-        # Hitung parameter untuk semua λ
+        # Hitung semua parameter
         rho_range = lambd_range / mu
         L_range = rho_range / (1 - rho_range)
         Lq_range = rho_range**2 / (1 - rho_range)
+        W_range = 1 / (mu - lambd_range)
+        Wq_range = rho_range / (mu - lambd_range)
 
-        # Buat figure gabungan
-        fig_line, ax_line = plt.subplots()
-        ax_line.plot(lambd_range, rho_range, label="Utilisasi (ρ)", color="purple")
-        ax_line.plot(lambd_range, L_range, label="Rata-rata Pelanggan (L)", color="blue")
-        ax_line.plot(lambd_range, Lq_range, label="Rata-rata Pelanggan Antrian (Lq)", color="orange")
-        ax_line.set_xlabel("λ (arrival rate)")
-        ax_line.set_ylabel("Nilai Parameter")
-        ax_line.set_title("Grafik ρ, L, dan Lq terhadap λ")
-        ax_line.legend()
-        st.pyplot(fig_line)
+        # Buat figure
+        fig, ax = plt.subplots(figsize=(8, 6))
+        ax.plot(lambd_range, rho_range, label="Utilisasi (ρ)", color="purple")
+        ax.plot(lambd_range, L_range, label="Rata-rata Pelanggan (L)", color="blue")
+        ax.plot(lambd_range, Lq_range, label="Rata-rata Antrian (Lq)", color="orange")
+        ax.plot(lambd_range, W_range, label="Waktu Sistem (W)", color="green")
+        ax.plot(lambd_range, Wq_range, label="Waktu Antrian (Wq)", color="red")
+        ax.set_xlabel("λ (arrival rate)")
+        ax.set_ylabel("Nilai Parameter")
+        ax.set_title("Grafik ρ, L, Lq, W, dan Wq terhadap λ")
+        ax.legend()
+        st.pyplot(fig)
+
 
 else:
     st.info("Masukkan λ dan μ > 0 untuk memulai perhitungan.")
