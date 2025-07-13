@@ -10,6 +10,8 @@ st.set_page_config(
 )
 
 # 🌟 Sidebar
+st.sidebar.title("UAS Matematika Terapan")
+st.sidebar.title("Adzan Takhyan Firdaus (312410043)")
 st.sidebar.title("ℹ️ Tentang EOQ")
 
 st.sidebar.markdown("""
