@@ -32,7 +32,7 @@ EOQ (*Economic Order Quantity*) adalah metode untuk menentukan jumlah pemesanan 
 # 🌟 Header utama
 st.markdown(
     """
-    <h1 style='text-align: center; color: #2c3e50;'>📦 Kalkulator EOQ</h1>
+    <h1 style='text-align: center; color: #2c3e50;'>📦 </h1>
     <p style='text-align: center; font-size:18px;'>Hitung kuantitas pemesanan optimal & visualisasi biaya persediaan</p>
     """,
     unsafe_allow_html=True
