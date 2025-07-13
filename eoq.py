@@ -3,18 +3,18 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 
-# 🟢 Konfigurasi Halaman
+# 🟢 Konfigurasi halaman
 st.set_page_config(
-    page_title="Kalkulator EOQ Jedag Jedug",
+    page_title="Kalkulator EOQ Lengkap",
     layout="centered",
     initial_sidebar_state="auto"
 )
 
-# 🟢 HEADER Custom
+# 🟢 HEADER
 st.markdown(
     """
-    <h1 style='text-align: center; color: #336699;'>📦 Kalkulator EOQ Jedag Jedug</h1>
-    <p style='text-align: center; font-size:18px;'>Optimalkan jumlah pesanan dan minimalkan biaya persediaan dengan visual interaktif</p>
+    <h1 style='text-align: center; color: #336699;'>📦 Kalkulator EOQ Lengkap</h1>
+    <p style='text-align: center; font-size:18px;'>Hitung jumlah pemesanan optimal dan visualisasi biaya persediaan</p>
     """,
     unsafe_allow_html=True
 )
@@ -38,7 +38,7 @@ if st.button("🚀 Hitung EOQ"):
         N = D / EOQ
         TC = (D / EOQ) * S + (EOQ / 2) * H
 
-        # 🟢 Hasil Perhitungan
+        # 🟢 Hasil
         st.success("✅ **Hasil Perhitungan Selesai!**")
         st.markdown(
             f"""
@@ -63,28 +63,41 @@ if st.button("🚀 Hitung EOQ"):
 
         st.markdown("---")
 
-        # 🟢 Grafik Total Cost vs Q
-        st.subheader("📈 Grafik Total Biaya vs Kuantitas Pesanan")
+        # 🟢 Grafik EOQ Lengkap
+        st.subheader("📈 Grafik Ordering Cost, Holding Cost, dan Total Cost")
+
         Q_range = np.linspace(1, EOQ * 2, 200)
-        TC_range = (D / Q_range) * S + (Q_range / 2) * H
+        Ordering_Cost = (D / Q_range) * S
+        Holding_Cost = (Q_range / 2) * H
+        Total_Cost = Ordering_Cost + Holding_Cost
 
         plt.style.use("seaborn-v0_8")
         fig, ax = plt.subplots(figsize=(9,6))
-        ax.plot(Q_range, TC_range, color="#1f77b4", linewidth=2, label="Total Biaya Persediaan")
-        ax.axvline(EOQ, color="red", linestyle="--", linewidth=2, label=f"EOQ = {EOQ:.2f}")
-        ax.scatter([EOQ], [TC], color="red", s=50)
-        ax.set_xlabel("Kuantitas Pesanan (Q)")
-        ax.set_ylabel("Total Biaya Persediaan")
-        ax.set_title("Grafik Total Biaya Persediaan terhadap Kuantitas Pesanan")
+
+        # Garis Ordering Cost
+        ax.plot(Q_range, Ordering_Cost, label="Ordering Cost", color="blue", linewidth=2)
+        # Garis Holding Cost
+        ax.plot(Q_range, Holding_Cost, label="Holding Cost", color="black", linewidth=2)
+        # Garis Total Cost
+        ax.plot(Q_range, Total_Cost, label="Total Cost", color="red", linewidth=2)
+
+        # Garis vertikal EOQ
+        ax.axvline(EOQ, color="gray", linestyle="--", linewidth=1)
+        # Titik EOQ
+        ax.scatter([EOQ], [TC], color="green", s=80, zorder=5)
+
+        # Label
+        ax.set_xlabel("Re-Order Quantity (Q)")
+        ax.set_ylabel("Annual Cost")
+        ax.set_title("EOQ Components: Ordering, Holding, and Total Cost")
         ax.legend()
         ax.grid(True, linestyle="--", alpha=0.7)
+
         st.pyplot(fig)
 
         st.markdown("---")
-
-        # 🟢 Info Footer
-        st.info("Aplikasi ini dibuat dengan ❤️ menggunakan Python dan Streamlit.\n\n© 2025 EOQ Jedag Jedug Project.")
+        st.info("Aplikasi ini dibuat dengan ❤️ menggunakan Python dan Streamlit.\n\n© 2025 EOQ Project.")
     else:
         st.error("Semua input harus lebih dari 0.")
 else:
-    st.info("Masukkan data kemudian klik **Hitung EOQ** untuk memulai.")
+    st.info("Masukkan data dan klik **Hitung EOQ** untuk memulai.")
